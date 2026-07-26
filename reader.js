@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Easy Reader transform.
  *
  * Bolds the leading letters of each word so the eye can recognise it from a
@@ -48,7 +48,12 @@ function toEasyRead(text, { fixation = 3, saccade = 10, dimOnCopy = false, dimCo
   let wordIndex = 0;
   let wordCount = 0;
 
-  for (const line of text.split(/\r\n|\r|\n/)) {
+  // Trailing blank lines and spaces would paste as empty paragraphs, so drop
+  // them. Whitespace inside the text is left exactly as typed.
+  const body = text.replace(/\s+$/, ''); // \s covers nbsp and other unicode spaces
+  if (!body) return { preview: '', clipboard: '', wordCount: 0 };
+
+  for (const line of body.split(/\r\n|\r|\n/)) {
     if (!line.trim()) {
       preview.push('<div class="ln"></div>');
       clipboard.push('<div><br></div>');
