@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Easy Reader — no length limit</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='white'/><path d='M30 24h40v10H42v11h22v10H42v11h28v10H30z' fill='black'/></svg>">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="bar">
+  <h1><b>Ea</b>sy <b>Rea</b>der</h1>
+
+  <div class="controls">
+    <label class="ctl">
+      <span>Fixation <output id="fixOut">3</output></span>
+      <input id="fixation" type="range" min="1" max="5" step="1" value="3"
+             title="How much of each word is bolded">
+    </label>
+
+    <label class="ctl">
+      <span>Saccade <output id="sacOut">10</output></span>
+      <input id="saccade" type="range" min="10" max="50" step="10" value="10"
+             title="Visual jump between fixations — higher skips more words">
+    </label>
+
+    <label class="ctl">
+      <span>Opacity <output id="opaOut">60%</output></span>
+      <input id="opacity" type="range" min="20" max="100" step="10" value="60"
+             title="Visibility of the non-bolded remainder">
+    </label>
+
+    <label class="chk" title="Carries the dimming into Word / Docs as a grey colour. Off = bold only.">
+      <input id="dimCopy" type="checkbox">
+      <span>Dim on copy</span>
+    </label>
+
+    <div class="presets">
+      <button id="save" class="ghost" title="Save the current settings (3 slots)">Save 0/3</button>
+      <div id="slots" class="slots"></div>
+    </div>
+
+    <button id="theme" class="ghost" title="Toggle theme">◐</button>
+  </div>
+</header>
+
+<main class="panes">
+  <section class="pane">
+    <div class="pane-head">
+      <h2>Your text</h2>
+      <div class="pane-actions">
+        <span class="stat" id="inStat">0 words</span>
+        <button id="sample" class="ghost">Sample</button>
+        <button id="clear" class="ghost">Clear</button>
+      </div>
+    </div>
+    <textarea id="input" spellcheck="false" placeholder="Paste or type anything here — there is no length limit.
+
+Drop a .txt file onto this box to load it."></textarea>
+  </section>
+
+  <section class="pane">
+    <div class="pane-head">
+      <h2>Easy read text</h2>
+      <div class="pane-actions">
+        <span class="stat" id="outStat"></span>
+        <button id="copy" class="primary">Copy</button>
+      </div>
+    </div>
+    <div id="output" class="output" tabindex="0"></div>
+  </section>
+</main>
+
+<p class="hint">Copy pastes as rich text — the <b>bold</b> survives into Word, PowerPoint, Google Docs and Slides, and the destination document's own font is kept.</p>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="reader.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

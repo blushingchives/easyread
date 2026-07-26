@@ -1,0 +1,272 @@
+:root {
+  --bg: #f7f7f5;
+  --panel: #ffffff;
+  --ink: #1b1b1a;
+  --muted: #6d6d68;
+  --line: #e2e2dd;
+  --accent: #2f6bff;
+  --radius: 10px;
+  color-scheme: light dark;
+}
+
+:root[data-theme="dark"] {
+  --bg: #16171a;
+  --panel: #1e2024;
+  --ink: #e9e9e6;
+  --muted: #9a9a94;
+  --line: #2f3238;
+  --accent: #6d97ff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16171a;
+    --panel: #1e2024;
+    --ink: #e9e9e6;
+    --muted: #9a9a94;
+    --line: #2f3238;
+    --accent: #6d97ff;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ---------- header ---------- */
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: .2px;
+}
+h1 b { font-weight: 700; }
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+}
+
+.ctl {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .6px;
+}
+.ctl output {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.ctl input[type="range"] {
+  width: 116px;
+  accent-color: var(--accent);
+  margin: 0;
+}
+
+.chk {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+}
+.chk input { accent-color: var(--accent); }
+
+/* ---------- buttons ---------- */
+
+button {
+  font: inherit;
+  font-size: 13px;
+  padding: 5px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color .12s, background .12s;
+}
+button:hover { border-color: var(--accent); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+button.full { color: var(--muted); }
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+button.primary:hover { filter: brightness(1.08); }
+
+/* ---------- presets ---------- */
+
+.presets,
+.slots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  overflow: hidden;
+  background: var(--panel);
+}
+.chip:hover { border-color: var(--accent); }
+
+.chip button {
+  border: 0;
+  border-radius: 0;
+  background: none;
+  padding: 5px 9px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.chip button:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+
+.chip .chip-del {
+  color: var(--muted);
+  border-left: 1px solid var(--line);
+  padding: 5px 8px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* ---------- panes ---------- */
+
+.panes {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  min-height: 0;
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  gap: 8px;
+}
+
+.pane-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 30px;
+}
+.pane-head h2 {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: var(--muted);
+}
+.pane-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.stat {
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+textarea,
+.output {
+  flex: 1;
+  min-height: 320px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--ink);
+  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  font-size: 17px;
+  line-height: 1.7;
+  overflow-y: auto;
+  overflow-wrap: break-word;
+}
+
+textarea {
+  resize: none;
+  white-space: pre-wrap;
+}
+textarea:focus,
+.output:focus { outline: none; border-color: var(--accent); }
+
+textarea.dropping { border-color: var(--accent); border-style: dashed; }
+
+.output { user-select: text; }
+.output .ln { min-height: 1.7em; }
+.output b { font-weight: 700; }
+.output .rest { opacity: var(--rest-opacity, .6); }
+
+.output:empty::before {
+  content: "Easy read text appears here.";
+  color: var(--muted);
+  font-style: italic;
+}
+
+.hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ---------- toast ---------- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translate(-50%, 12px);
+  padding: 9px 16px;
+  border-radius: 8px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s, transform .18s;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 860px) {
+  .panes { grid-template-columns: 1fr; }
+  textarea, .output { min-height: 260px; }
+}
