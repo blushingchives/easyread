@@ -20,6 +20,16 @@ const WORD_RE = /[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu;
 const ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;' };
 const escapeHtml = (s) => s.replace(/[&<>]/g, (c) => ESC[c]);
 
+// Office and the web are full of spaces that look ordinary but aren't. Word
+// won't wrap a line at a non-breaking space, so "word<nbsp>word" becomes one
+// unbreakable token that gets pushed to the next line — which reads as a stray
+// line break. Fold them all down to a plain space.
+const LOOKALIKE_SPACE = /[\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000]/g;
+
+// Zero-width characters: no glyph at all, but they still split words and
+// survive a paste. Nothing in a reading aid needs them.
+const ZERO_WIDTH = /[\u200b-\u200d\u2060\ufeff]/g;
+
 /** Number of leading characters to bold for a word at a given fixation. */
 function headLength(word, fixation) {
   const n = word.length;
@@ -48,9 +58,12 @@ function toEasyRead(text, { fixation = 3, saccade = 10, dimOnCopy = false, dimCo
   let wordIndex = 0;
   let wordCount = 0;
 
-  // Trailing blank lines and spaces would paste as empty paragraphs, so drop
-  // them. Whitespace inside the text is left exactly as typed.
-  const body = text.replace(/\s+$/, ''); // \s covers nbsp and other unicode spaces
+  // Normalise invisible junk that rides in from Office and the web, then drop
+  // trailing blank lines so they don't paste as empty paragraphs.
+  const body = text
+    .replace(ZERO_WIDTH, '')
+    .replace(LOOKALIKE_SPACE, ' ')
+    .replace(/\s+$/, '');
   if (!body) return { preview: '', clipboard: '', wordCount: 0 };
 
   for (const line of body.split(/\r\n|\r|\n/)) {
